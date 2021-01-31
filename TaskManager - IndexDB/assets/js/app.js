@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
 
         // createindex: 1) field name 2) keypath 3) options
-        // objectStore.createIndex('tasknamez', ['taskname', 'date'], { unique: false });
-        objectStore.createIndex('created', 'date', { unique: true });
+        objectStore.createIndex('tasknamez', ['taskname', 'date'], { unique: false });
+        // objectStore.createIndex('created', 'date', { unique: true });
 
         console.log('Database ready and fields created!');
     }
@@ -125,7 +125,7 @@ function displayTaskList(e){
     while (taskList.firstChild) { taskList.removeChild(taskList.firstChild); }
 
     // create the object store
-    let objectStore = DB.transaction('tasks').objectStore('tasks').index('created');
+    let objectStore = DB.transaction('tasks').objectStore('tasks').index('tasknamez');
     let param1;
     let param2;
     if(isSorted) {
@@ -148,7 +148,7 @@ function displayTaskList(e){
             const link = document.createElement('a');
             // Add class and the x marker for a 
             link.className = 'delete-item secondary-content';
-            link.innerHTML = '<i class="fa fa-remove"></i>';
+            link.innerHTML = '<i class="fa fa-remove"></i> &nbsp;<a href="./../edit.html?id=${cursor.value.id}"><i class="fa fa-edit"></i> </a> ';
             // Append link to li
 
             li.appendChild(link);

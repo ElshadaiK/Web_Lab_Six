@@ -71,6 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
         2. Use the id on put method of index db
         
         */
+       let taskID = Number(e.target.parentElement.parentElement.getAttribute('data-task-id'));
+            // use a transaction
+            let transaction = DB.transaction('tasks', 'readwrite');
+            let objectStore = transaction.objectStore('tasks');
+            objectStore.put(taskInput.textContent, taskID);
 
         history.back();
     }
