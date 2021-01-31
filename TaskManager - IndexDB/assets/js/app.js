@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
 
         // createindex: 1) field name 2) keypath 3) options
-        objectStore.createIndex('tasknamez', ['taskname', 'date'], { unique: false });
+        objectStore.createIndex('tasknamez', ['date', 'taskname'], { unique: false });
         // objectStore.createIndex('created', 'date', { unique: true });
 
         console.log('Database ready and fields created!');
