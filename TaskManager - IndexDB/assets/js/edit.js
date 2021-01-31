@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let TasksDB = indexedDB.open('tasks', 1);
 
     // if there's an error
-    TasksDB.onerror = function() {
-            console.log('There was an error');
-        }
-        // if everything is fine, assign the result to the instance
-    TasksDB.onsuccess = function() {
+    TasksDB.onerror = function () {
+        console.log('There was an error');
+    }
+    // if everything is fine, assign the result to the instance
+    TasksDB.onsuccess = function () {
         // console.log('Database Ready');
 
         // save the result
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var objectStore = transaction.objectStore('tasks');
         var request = objectStore.get(id);
 
-        request.onsuccess = function(event) {
+        request.onsuccess = function (event) {
             if (request.result) {
                 taskInput.value = request.result.taskname;
 
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        request.onerror = function(event) {
+        request.onerror = function (event) {
             console.log('Transaction failed');
         };
 
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateTask(e) {
         e.preventDefault();
+
 
         // Check empty entry
         if (taskInput.value === '') {
@@ -71,16 +72,46 @@ document.addEventListener('DOMContentLoaded', () => {
         2. Use the id on put method of index db
         
         */
-       let taskID = Number(e.target.parentElement.parentElement.getAttribute('data-task-id'));
-            // use a transaction
-            let transaction = DB.transaction('tasks', 'readwrite');
-            let objectStore = transaction.objectStore('tasks');
-            objectStore.put(taskInput.textContent, taskID);
+        // use a transaction
+        let transaction = DB.transaction('tasks', 'readwrite');
+        let objectStore = transaction.objectStore('tasks');
+        let req = objectStore.openCursor()
+        req.onerror = function (e) {
+            console.log("case if have an error");
+        };
+        req.onsuccess = function (e) {
+            let cursor = e.target.result;
+            let newTask = {
+                taskname: taskInput.value,
+                date: Date.now(),
+                id: id
+            }
+
+            if (cursor) {
+                
+                if(cursor.value.id == id){
+                    
+                
+                var res = cursor.update(newTask);
+                res.onsuccess = function (e) {
+                    console.log("update success!!");
+                }
+                res.onerror = function (e) {
+                    console.log("update failed!!");
+                }
+
+            }
+            cursor.continue();
+        }
+        else {
+            console.log("fin mise a jour");
+        }
+            // objectStore.put(newTask, newTask);
 
         history.back();
+        }
+        
     }
-
-
 
 
 });
