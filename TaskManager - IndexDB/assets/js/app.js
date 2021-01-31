@@ -14,6 +14,15 @@ const reloadIcon = document.querySelector('.fa');
 
 let DB;
 let isSorted = true;
+
+// Event Listener for reload 
+reloadIcon.addEventListener('click', reloadPage);
+
+// Reload Page Function 
+function reloadPage() {
+    //using the reload fun on location object 
+    location.reload();
+}
 form.addEventListener('submit', addNewTask);
 
 document.addEventListener('DOMContentLoaded', () => {
